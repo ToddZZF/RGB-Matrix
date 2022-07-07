@@ -123,3 +123,9 @@ typedef struct {
 `refresh` 就是调用 `rmt_write_sample` 发送数据，然后用 `rmt_wait_tx_done` 等待返回传输结果（api 参数中的 timeout_ms 就是用于此）
 
 `clear` 就是将所有 RGB 数据置 0.
+
+## 外层封装
+
+参考 Arduino 上的一些出名的库，比如：[FastLED](https://github.com/FastLED/FastLED/wiki/)、[Adafruit_NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel)、[WS2812FX](https://github.com/kitesurfer1404/WS2812FX)
+
+逐个赋值的方法太麻烦了，需要对底层进行封装从而方便像素灯开发。但这样的话就涉及到对 `buffer` 直接赋值（调用 `set_pixel` 太麻烦了），因此就需要对原 `led_strip` 库修改，将 `ws2812_t` 放到头文件中从而使得可以访问 `ws2812_t.buffer`，同时还要修改原 api 的参数（`led_strip_t` 替换为 `ws2812_t`）
