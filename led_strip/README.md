@@ -1,5 +1,7 @@
 # led_strip
 
+> 注意：原 led_strip 演示的代码请参考官方的 blink 示例，此文件夹的代码是经过修改后的 led_strip。
+
 演示如何利用官方的 led_strip 来驱动 WS2812 灯带。要使用该库，需要在项目根目录下的 `CMakeList.txt` 文件中添加：
 
 ```c
@@ -124,8 +126,30 @@ typedef struct {
 
 `clear` 就是将所有 RGB 数据置 0.
 
-## 外层封装
-
-参考 Arduino 上的一些出名的库，比如：[FastLED](https://github.com/FastLED/FastLED/wiki/)、[Adafruit_NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel)、[WS2812FX](https://github.com/kitesurfer1404/WS2812FX)
+## 对 led_strip 修改
 
 逐个赋值的方法太麻烦了，需要对底层进行封装从而方便像素灯开发。但这样的话就涉及到对 `buffer` 直接赋值（调用 `set_pixel` 太麻烦了），因此就需要对原 `led_strip` 库修改，将 `ws2812_t` 放到头文件中从而使得可以访问 `ws2812_t.buffer`，同时还要修改原 api 的参数（`led_strip_t` 替换为 `ws2812_t`）
+
+修改后的 api 如下：
+
+```c
+static ws2812_t *ws2812; //ws2812 device
+
+ws2812 = ws2812_init(0, RGB_PIN, 3); // init
+
+ws2812->set_pixel(ws2812, 0, 1, 0, 0); // set pixel (safe)
+// or
+ws2812->buffer[0 * 3 + 1] = 1; // set pixel (unsafe)
+
+ws2812->refresh(ws2812, 100); // refresh
+
+ws2812->clear(ws2812, 50); //clear all pixels
+
+ws2812_denit(ws2812); //denit 
+```
+
+由于该库是与 ws2812 密切相关的，所以文件名也从 led_strip 修改为 ws2812.
+
+## 高级封装
+
+参考 Arduino 上的一些出名的库，比如：[FastLED](https://github.com/FastLED/FastLED/wiki/)、[Adafruit_NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel)、[WS2812FX](https://github.com/kitesurfer1404/WS2812FX)

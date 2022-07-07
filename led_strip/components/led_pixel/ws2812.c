@@ -16,7 +16,7 @@
 #include <sys/cdefs.h>
 #include "esp_log.h"
 #include "esp_attr.h"
-#include "led_strip.h"
+#include "ws2812.h"
 #include "driver/rmt.h"
 
 #define RMT_TX_CHANNEL RMT_CHANNEL_0
@@ -183,7 +183,7 @@ err:
     return ret;
 }
 
-ws2812_t *led_strip_init(uint8_t channel, uint8_t gpio, uint16_t led_num)
+ws2812_t *ws2812_init(uint8_t channel, uint8_t gpio, uint16_t led_num)
 {
     static ws2812_t *ws2812;
     rmt_config_t config = RMT_DEFAULT_CONFIG_TX(gpio, channel);
@@ -210,7 +210,7 @@ ws2812_t *led_strip_init(uint8_t channel, uint8_t gpio, uint16_t led_num)
     return ws2812;
 }
 
-esp_err_t led_strip_denit(ws2812_t *ws2812)
+esp_err_t ws2812_denit(ws2812_t *ws2812)
 {
     ESP_ERROR_CHECK(rmt_driver_uninstall(ws2812->rmt_channel));
     return ws2812->del(ws2812);

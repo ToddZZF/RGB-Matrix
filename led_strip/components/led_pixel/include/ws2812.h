@@ -151,7 +151,7 @@ extern "C"
      * @return
      *      LED strip instance or NULL
      */
-    ws2812_t *led_strip_init(uint8_t channel, uint8_t gpio, uint16_t led_num);
+    ws2812_t *ws2812_init(uint8_t channel, uint8_t gpio, uint16_t led_num);
 
     /**
      * @brief Denit the RMT peripheral.
@@ -161,7 +161,7 @@ extern "C"
      *     - ESP_OK
      *     - ESP_FAIL
      */
-    esp_err_t led_strip_denit(ws2812_t *ws2812);
+    esp_err_t ws2812_denit(ws2812_t *ws2812);
 
 #ifdef __cplusplus
 }
