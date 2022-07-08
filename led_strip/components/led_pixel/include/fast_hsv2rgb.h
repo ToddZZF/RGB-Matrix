@@ -83,3 +83,6 @@ void fast_hsv2rgb_32bit(uint16_t h, uint8_t s, uint8_t v, uint8_t *r, uint8_t *g
 			} \
 		} \
 	} while(0)
+
+void led_strip_hsv2rgb(uint16_t h, uint8_t s, uint8_t v,
+                       uint8_t *r, uint8_t *g, uint8_t *b);

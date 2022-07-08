@@ -46,3 +46,50 @@ void fast_hsv2rgb_32bit(uint16_t h, uint8_t s, uint8_t v, uint8_t *r, uint8_t *g
         *r = d >> 16;
     }
 }
+
+void led_strip_hsv2rgb(uint16_t h, uint8_t s, uint8_t v,
+                       uint8_t *r, uint8_t *g, uint8_t *b)
+{
+    h %= HSV_HUE_STEPS; // h -> [0,360]
+    uint8_t rgb_max = v;
+    uint8_t rgb_min = rgb_max * (HSV_SAT_MAX - s) / 255.0f;
+
+    uint8_t i = h / HSV_HUE_SEXTANT;
+    uint8_t diff = h % HSV_HUE_SEXTANT;
+
+    // RGB adjustment amount by hue
+    uint8_t rgb_adj = (rgb_max - rgb_min) * diff / HSV_HUE_SEXTANT;
+
+    switch (i) {
+    case 0:
+        *r = rgb_max;
+        *g = rgb_min + rgb_adj;
+        *b = rgb_min;
+        break;
+    case 1:
+        *r = rgb_max - rgb_adj;
+        *g = rgb_max;
+        *b = rgb_min;
+        break;
+    case 2:
+        *r = rgb_min;
+        *g = rgb_max;
+        *b = rgb_min + rgb_adj;
+        break;
+    case 3:
+        *r = rgb_min;
+        *g = rgb_max - rgb_adj;
+        *b = rgb_max;
+        break;
+    case 4:
+        *r = rgb_min + rgb_adj;
+        *g = rgb_min;
+        *b = rgb_max;
+        break;
+    default:
+        *r = rgb_max;
+        *g = rgb_min;
+        *b = rgb_max - rgb_adj;
+        break;
+    }
+}

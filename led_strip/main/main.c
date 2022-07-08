@@ -25,7 +25,7 @@ static void blink_led(void)
     }
     else
     {
-        h=(h+10)%1536;
+        h=(h+10)%HSV_HUE_STEPS;
         s=255;
         v=13;
         // hsv2rgb(h,s,v,&r,&g,&b);
@@ -33,6 +33,8 @@ static void blink_led(void)
         // ESP_LOGI(TAG, "slow R:%i G:%i, B:%i", r,g,b);
         fast_hsv2rgb_32bit(h,s,v,&r,&g,&b);
         ESP_LOGI(TAG, "fast R:%i G:%i, B:%i", r,g,b);
+        led_strip_hsv2rgb(h,s,v,&r,&g,&b);
+        ESP_LOGI(TAG, "slow R:%i G:%i, B:%i", r,g,b);
     }
 }
 
