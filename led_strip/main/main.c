@@ -12,22 +12,25 @@
 static const char *TAG = "ws2812";
 static uint8_t s_led_state = 0;
 static ws2812_t *ws2812;
+static uint8_t LED_NUM = 49;
 
 static void blink_led(void)
 {
     static uint8_t r,g,b;
     static uint16_t h;
     static uint8_t s,v;
+    static uint8_t led_id = 0;
     if (s_led_state)
     {
-        ws2812->set_pixel(ws2812, 0, r, g, b);
+        ws2812->set_pixel(ws2812, led_id, r, g, b);
+        led_id = (led_id+1)%LED_NUM;
         ws2812->refresh(ws2812, 100);
     }
     else
     {
-        h=(h+10)%HSV_HUE_STEPS;
-        s=255;
-        v=13;
+        h=(h+16)%HSV_HUE_STEPS;
+        s=200;
+        v=10;
         // hsv2rgb(h,s,v,&r,&g,&b);
         // ESP_LOGI(TAG, "H:%i S:%i, V:%i", h,s,v);
         // ESP_LOGI(TAG, "slow R:%i G:%i, B:%i", r,g,b);
@@ -58,7 +61,7 @@ static void blink_led_2(void)
 static void configure_led(void)
 {
     ESP_LOGI(TAG, "Config WS2812");
-    ws2812 = ws2812_init(0, RGB_PIN, 3);
+    ws2812 = ws2812_init(0, RGB_PIN, LED_NUM);
     ws2812->clear(ws2812, 50);
 }
 
